@@ -18,8 +18,8 @@ return [
 
         // Facebook
         'facebook' => [
-            'id' => '',
-            'secret' => '',
+            'app_id' => '643803342496337',
+            'app_secret' => '26141daa4290f6f1ae3b5587d414550b'
         ]
     ],
 ];

@@ -1,4 +1,14 @@
 <?php
 // Routes
 
-$app->get('/profile/facebook/{facebookId}', 'Aivo\ProfileController:getFacebookUserById');
+/*** Web Routea ***/
+$app->get(
+    '/',
+    'Aivo\WebController:IndexAction'
+);
+
+/*** Profile Routes  ***/
+$app->get(
+    '/profile/facebook/{facebookId}',
+    'Aivo\ProfileController:getFacebookUserByIdAction'
+);
