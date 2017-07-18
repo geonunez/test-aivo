@@ -3,10 +3,15 @@
 ### Description
 Build a service which retrieves the profile of one facebook user, using the Facebook API Graph.
 
-### Getting the project
-You just have to download it from github using this command:
+### Get and install the project
+***This example assume that project is located in /var/www/ and you have composer installed globally***
+You just have to download it from github, run composer and fix the log folder permission:
 ```bash
 # git clone https://github.com/geonunez/test-aivo /var/www/test-aivo
+# cd /var/www/test-aivo && composer install
+# HTTPDUSER=$(ps axo user,comm | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1)
+# setfacl -dR -m u:"$HTTPDUSER":rwX -m u:$(whoami):rwX logs
+# setfacl -R -m u:"$HTTPDUSER":rwX -m u:$(whoami):rwX logs
 ```
 
 ### Installing it over Apache
@@ -32,5 +37,3 @@ You just have to download it from github using this command:
 # a2ensite test-aivo.conf
 # service apache2 reload
 ```
-
-

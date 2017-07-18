@@ -15,5 +15,11 @@ return [
             'path' => __DIR__ . '/../logs/app.log',
             'level' => \Monolog\Logger::DEBUG,
         ],
+
+        // Facebook
+        'facebook' => [
+            'id' => '',
+            'secret' => '',
+        ]
     ],
 ];
