@@ -1,5 +1,8 @@
 # Test Aivo
 
+## Note
+***This project is a test to apply for a job. Some things are taken for granted***
+
 ### Description
 Build a service which retrieves the profile of one facebook user, using the Facebook API Graph.
 
@@ -36,4 +39,10 @@ You just have to download it from github, run composer and fix the log folder pe
 ```bash
 # a2ensite test-aivo.conf
 # service apache2 reload
+```
+
+### Run Test
+To run the tests execute
+```bash
+# composer test
 ```

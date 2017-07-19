@@ -90,7 +90,7 @@ class ProfileController extends BaseApiController
         $token = $facebook->getApp()->getAccessToken();
         try {
             $facebookResponse = $facebook->get($id, $token);
-            $user = $result->getGraphUser();
+            $user = $facebookResponse->getGraphUser();
 
             // If we need to process facebook response to reduce the information,
             // I will create a resource to reduce it, but the statement said
