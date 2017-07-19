@@ -6,8 +6,6 @@ use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-use Facebook\Facebook;
-
 /**
  * Base Controller
  */
@@ -32,6 +30,31 @@ abstract class BaseController
 }
 
 /**
+ * Base Api Controller
+ */
+abstract class BaseApiController extends BaseController
+{
+    /**
+     * Creates an api error result.
+     *
+     * @param  string $message
+     * @param  int    $statusCode
+     *
+     * @return  array
+     */
+    protected function createErrorResult($message, $statusCode)
+    {
+        // Log the message
+        $this->container->logger->addInfo($message);
+
+        return [
+            'description' => $message,
+            'statusCode'  => $statusCode
+        ];
+    }
+}
+
+/**
  * Web Controller
  */
 class WebController extends BaseController
@@ -47,10 +70,8 @@ class WebController extends BaseController
 /**
  * Profile Controller
  */
-class ProfileController extends BaseController
+class ProfileController extends BaseApiController
 {
-
-
     /**
      * Action to get a user from facebook.
      *
@@ -62,17 +83,31 @@ class ProfileController extends BaseController
      */
     public function getFacebookUserByIdAction($request, $response, $args)
     {
+        $statusCode = 200;
         $facebook = $this->getFacebookObject();
 
         $id = $args['facebookId'];
         $token = $facebook->getApp()->getAccessToken();
-        $user = $facebook->get($id, $token)->getGraphUser();
+        try {
+            $facebookResponse = $facebook->get($id, $token);
+            $user = $result->getGraphUser();
 
-        // If we need to process facebook response to reduce the information,
-        // I will create a resource to reduce it, but the statement said
-        // that all information is need it.
+            // If we need to process facebook response to reduce the information,
+            // I will create a resource to reduce it, but the statement said
+            // that all information is need it.
+            $result = $user->asArray();
 
-        return $response->withJson($user->asArray());
+        } catch (\Facebook\Exceptions\FacebookResponseException $e) {
+            $message = 'Graph returned an error: ' . $e->getMessage();
+            $statusCode = 400;
+            $result = $this->createErrorResult($message, $statusCode);
+        } catch (\Facebook\Exceptions\FacebookSDKException $e) {
+            $message = 'Graph returned an error: ' . $e->getMessage();
+            $statusCode = 500;
+            $result = $this->createErrorResult($message, $statusCode);
+        }
+
+        return $response->withJson($result, $statusCode);
     }
 
     /*** Service ***/
@@ -81,7 +116,8 @@ class ProfileController extends BaseController
      * Creates a facebook object.
      *
      * Note: I tried to put this code as a service, but to complete the tasks
-     * I just left it here. I just need to research a little more.
+     * I just left it here. I just need to research a little more to create
+     * a services using Slim.
      *
      * @return Facebook\Facebook
      */
@@ -91,7 +127,7 @@ class ProfileController extends BaseController
         $id = $facebookSettings['app_id'];
         $secret = $facebookSettings['app_secret'];
 
-        $facebook =  new Facebook([
+        $facebook =  new \Facebook\Facebook([
             'app_id'                => $id,
             'app_secret'            => $secret,
             'default_graph_version' => 'v2.9',
