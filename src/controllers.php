@@ -7,6 +7,11 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 
 /**
+ * I APPLY A DJANGO PHILOSOPHY TO MAKE THE TEST SIMPLE.
+ * IF THE PROJECT WAS BIG, EACH CONTROLLER WOULD HAD ITS OWN FILE.
+ */
+
+/**
  * Base Controller
  */
 abstract class BaseController
