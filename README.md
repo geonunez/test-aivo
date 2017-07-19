@@ -1,7 +1,7 @@
 # Test Aivo
 
 ## Note
-***This project is a test to apply for a job. Some things are taken for granted***
+***This project is a test to apply for a job. Somethings are taken for granted***
 
 ### Description
 Build a service which retrieves the profile of one facebook user, using the Facebook API Graph.
